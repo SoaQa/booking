@@ -9,7 +9,7 @@ from api.serializers import UserSerializer, HotelSerializer, RoomSerializer, Boo
 
 class UserModelViewSet(viewsets.ModelViewSet):
     queryset = ApiUser.objects.all()
-    http_method_names = ['post', 'path', 'get']
+    http_method_names = ['post', 'get']
     serializer_class = UserSerializer
 
     authentication_classes = []
@@ -24,7 +24,9 @@ class HotelModelViewSet(viewsets.ModelViewSet):
     def rooms(self, request, pk=None):
         hotel = get_object_or_404(Hotel.objects.all(), id=pk)
         free_rooms = hotel.rooms.filter(bookings__isnull=True)
-        return Response(RoomSerializer(free_rooms, many=True).data)
+        return Response(
+            RoomSerializer(free_rooms, many=True).data
+        )
 
 
 class RoomModelViewSet(viewsets.ModelViewSet):
